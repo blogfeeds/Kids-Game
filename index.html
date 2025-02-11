@@ -1,1 +1,448 @@
-its works
+<!DOCTYPE html>
+<html lang="en" prefix="og: https://ogp.me/ns#" itemscope itemtype="https://schema.org/Game">
+<head>
+    <meta charset="UTF-8">
+	<title>Play Free Kid-friendly Emojis HTML Games | Kiddo Games</title>
+	<meta name="description" content="Play educational kid-friendly game suitable for kids or elementary school students">
+    <meta name="keywords" content="education game, maths play, pbs kids games, and fun game, math games for kids, kindergarten games, minecraft education, minecraft education edition, endless alphabet, emoji game, html game, html5 games, html canvas game, hooda math game, jumping zombie, HTML Game Example, Top HTML5 games, JavaScript Game, emojis games">
+	 <meta name="last-updated" content="2025-02-12 13:08:54 UTC">
+      <meta name="user-signed-in" content="false">
+      <meta name="head-cached-at" content="1733144934">
+      <meta name="environment" content="production">
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+	  <link rel="canonical" href="https://kiddogames.pages.dev/">
+	  <meta property="og:type" content="website"">
+  <meta property="og:url" content="https://kiddogames.pages.dev/"">
+  <meta property="og:title" content="Kiddo Games"">
+  <meta property="og:image" content="https://kiddogames.pages.dev/kiddo-games-og.png">
+  <meta property="og:description" content="Play educational kid-friendly game suitable for kids or elementary school students">
+  <meta property="og:site_name" content="Kiddo Games"">
+  <meta name="twitter:site" content="@thepracticaldev">
+  <meta name="twitter:title" content="Kiddo Games">
+  <meta name="twitter:description" content="Play educational kid-friendly game suitable for kids or elementary school students">
+  <meta name="twitter:image:src" content="https://kiddogames.pages.dev/kiddo-games-og.png">
+  <meta name="robots" content="NOODP,INDEX,FOLLOW,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="google-site-verification" content="kNjHkvngezEnkoZVik8KZ37GFclKaggKdROdG1fWJKA" />
+    <link rel="icon" href="games-icon.png" type="image/png">
+    <style>
+        :root {
+    --bg-color: #ffffff; /* Default background color */
+    --text-color: #000000; /* Default text color */
+    --accent-color: #000000;
+    --card-bg: #f0f0f0; /* Lighter card background */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+     background: linear-gradient(135deg, #a8edea, #fed6e3);
+    color: var(--text-color);
+}
+
+.dark-mode {
+    --bg-color: #1a1a1a;
+    --text-color: #ffc83d;
+    --card-bg: #2d2d2d;
+}
+
+.light-mode {
+    --bg-color: #ffffff;
+    --text-color: #000000; /* Ensure text remains black */
+    --card-bg: #f0f0f0; /* Light card background */
+}
+
+nav {
+    padding: 1rem 5%;
+    background: #2d2d2d;
+    display: flex;
+    color: #ffffff;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: yellow;
+	margin-left: 1rem;
+}
+
+.nav-links a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-left: 1rem;
+}
+
+.search-box {
+            padding: 0.5rem;
+            border-radius: 20px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            width: 35%;
+			margin-right: 2rem;
+            margin: 0 auto; /* Center search box */
+            display: block; /* Agar margin auto berfungsi */
+        }
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem 5%;
+}
+
+.game-card {
+    background: var(--card-bg);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.8);
+}
+
+.game-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.game-info {
+    padding: 1rem;
+}
+
+.play-btn {
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 1rem;
+    display: block;
+    width: 100%;
+}
+
+.dark-toggle {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.embed-section {
+    margin-top: 1rem;
+    display: none;
+}
+
+.embed-code {
+    width: 100%;
+    height: 50px;
+    padding: 0.8rem;
+    background: var(--card-bg);
+    border: 1px solid var(--accent-color);
+    border-radius: 8px;
+    color: #000000;
+    font-family: monospace;
+    font-size: 0.8rem;
+    resize: none;
+    cursor: pointer;
+}
+
+.embed-code:focus {
+    outline: none;
+    box-shadow: 0 0 5px var(--accent-color);
+}
+a {
+text-decoration: none;
+color: black;
+}
+
+.embed-btn {
+    background: transparent;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+.embed-btn:hover {
+    background: rgba(0, 255, 136, 0.1);
+}
+
+/* Style for h1 */
+h1 {
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+    -webkit-background-clip: text; /* For Safari */
+    -webkit-text-fill-color: transparent; /* For Safari */
+    color: transparent; /* Fallback color */
+    font-size: 2rem; /* Equivalent to H2 size */
+    text-align: center; /* Center the text */
+    padding: 20px; /* Add some padding */
+    margin: 20px 0; /* Add margin above and below */
+    border-radius: 10px; /* Optional: rounded corners */
+}
+
+.nav-links {
+            display: flex;
+            justify-content: space-around;
+            background-color: #333;
+            padding: 5px;
+			color: white;
+        }
+        .footer {
+            display: none; /* Sembunyikan footer pada perangkat desktop */
+            background-color: #333;
+            padding: 10px;
+            text-align: center;
+			font-size: 1rem;
+			color: #fff;
+        }
+
+/* Media query for responsive design */
+@media (max-width: 768px) {
+          .nav-links {
+                display: none; /* Sembunyikan navbar pada perangkat mobile */
+            }
+            .footer {
+                display: flex; /* Tampilkan footer pada perangkat mobile */
+                justify-content: space-around;
+                background-color: #333; /* Background footer */
+            }
+			.header {
+                display: flex;
+                flex-direction: column;
+                align-items: center; /* Center items */
+                justify-content: center; /* Center items vertically */
+                padding: 1rem; /* Padding untuk header */
+            }
+			.logo {
+    font-size: 1.2rem;
+    color: yellow;
+	margin-left: 1rem;
+}
+           .footer a {
+                color: #fff; /* Warna hyperlink putih */
+            }
+        }
+    </style>
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Kiddo Games",
+        "url": "https://kiddogames.pages.dev",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://kiddogames.pages.dev/?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>	
+</head>
+<body>
+    <nav>
+	<div class="header">
+        <div class="logo">😍Kiddo Games</div>
+        <div class="nav-links">
+           <a href="/">Home</a>
+            <a href="about-us">About Us</a>
+            <a href="privacy-policy">Privacy Policy</a>
+            <a href="terms-of-use">Terms of Use</a>
+			 <a href="contact-us">Contact Us</a>
+			
+        </div></div>
+        <input type="text" class="search-box" placeholder="🔍 Search games...">
+    </nav>
+ <br/><center>Play educational kid-friendly game suitable for kids or elementary school students</center>
+    <div class="games-grid">
+        <div class="game-card" data-game-url="https://kiddogames.pages.dev/emoji-trivia">
+            <img src="emoji-trivia.png" alt="Emoji Trivia">
+            <div class="game-info">
+                <a href="https://kiddogames.pages.dev/emoji-trivia"><h3>😃Emoji Trivia</h3></a>
+				<p>See a question with an emoji, type your answer into the input field and click the "Submit Answer" button.</p>
+				
+                <button class="play-btn">PLAY NOW</button>
+                <button class="embed-btn">SHOW EMBED CODE</button>
+                <div class="embed-section">
+                    <textarea class="embed-code" readonly onclick="this.select()"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- start copy -->
+        <div class="game-card" data-game-url="https://kiddogames.pages.dev/physics-trivia">
+            <img src="physics-trivia.png" alt="Kids Game">
+            <div class="game-info">
+              <a href="https://kiddogames.pages.dev/physics-trivia">  <h3>💫Physics Trivia Game</h3></a>
+				<p>List of physics questions suitable for elementary school students,  type your answer and "Submit Answer" button.</p>
+                <button class="play-btn">PLAY NOW</button>
+                <button class="embed-btn">SHOW EMBED CODE</button>
+                <div class="embed-section">
+                    <textarea class="embed-code" readonly onclick="this.select()"></textarea>
+                </div>
+            </div>
+        </div>
+    <!-- start copy -->  
+<div class="game-card" data-game-url="https://kiddogames.pages.dev/country-flag-trivia">
+            <img src="country-flag-trivia.png" alt="Kids Game">
+            <div class="game-info">
+               <a href="https://kiddogames.pages.dev/country-flag-trivia"> <h3>🌐Country Flag Trivia</h3></a>
+				<p>Each question features a country flag, answers correspond to the name of the country represented by the flag</p>
+                <button class="play-btn">PLAY NOW</button>
+                <button class="embed-btn">SHOW EMBED CODE</button>
+                <div class="embed-section">
+                    <textarea class="embed-code" readonly onclick="this.select()"></textarea>
+                </div>
+            </div>
+        </div>   <!-- end copy -->
+	<!-- start copy -->  
+<div class="game-card" data-game-url="https://kiddogames.pages.dev/fruits-collector">
+            <img src="fruits-collector.png" alt="Kids Game">
+            <div class="game-info">
+               <a href="https://kiddogames.pages.dev/fruits-collector"> <h3>🍓Fruits Collector</h3></a>
+				<p>The game continues indefinitely.  The more fruits you catch, the higher your score!</p>
+                <button class="play-btn">PLAY NOW</button>
+                <button class="embed-btn">SHOW EMBED CODE</button>
+                <div class="embed-section">
+                    <textarea class="embed-code" readonly onclick="this.select()"></textarea>
+                </div>
+            </div>
+        </div>   <!-- end copy -->	
+<!-- start copy -->  
+<div class="game-card" data-game-url="https://kiddogames.pages.dev/gift-box-scramble">
+            <img src="gift-box-scramble.png" alt="Kids Game">
+            <div class="game-info">
+              <a href="https://kiddogames.pages.dev/gift-box-scramble">  <h3>🎁Scramble Gift Box</h3></a>
+				<p>Click or tap on the button to the answer you believe is correct, Your score updated after each question.</p>
+                <button class="play-btn">PLAY NOW</button>
+                <button class="embed-btn">SHOW EMBED CODE</button>
+                <div class="embed-section">
+                    <textarea class="embed-code" readonly onclick="this.select()"></textarea>
+                </div>
+            </div>
+        </div>   <!-- end copy -->	
+<!-- start copy -->  
+<div class="game-card" data-game-url="https://kiddogames.pages.dev/spider-splash">
+            <img src="spider-splash.png" alt="Kids Game">
+            <div class="game-info">
+                <a href="https://kiddogames.pages.dev/spider-splash"><h3>🕸Spider Splash</h3></a>
+				<p>kid-friendly game where spiders move around, and the player clicks or taps the spider</p>
+                <button class="play-btn">PLAY NOW</button>
+                <button class="embed-btn">SHOW EMBED CODE</button>
+                <div class="embed-section">
+                    <textarea class="embed-code" readonly onclick="this.select()"></textarea>
+                </div>
+            </div>
+        </div>   <!-- end copy -->		
+<!-- start copy -->  
+<div class="game-card" data-game-url="https://kiddogames.pages.dev/rock-paper-scissors">
+            <img src="rock-paper-scissors.png" alt="Kids Game">
+            <div class="game-info">
+               <a href="https://kiddogames.pages.dev/rock-paper-scissors"> <h3>🖐️Rock Paper Scissors</h3></a>
+				<p>Classic Fun Rock-Paper-Scissors game for kids with emojis and smooth animations</p>
+                <button class="play-btn">PLAY NOW</button>
+                <button class="embed-btn">SHOW EMBED CODE</button>
+                <div class="embed-section">
+                    <textarea class="embed-code" readonly onclick="this.select()"></textarea>
+                </div>
+            </div>
+        </div>   <!-- end copy -->		
+<!-- start copy -->  
+<div class="game-card" data-game-url="https://kiddogames.pages.dev/memory-game">
+            <img src="memory-game.png" alt="Kids Game">
+            <div class="game-info">
+               <a href="https://kiddogames.pages.dev/memory-game"> <h3>🧐Emoji Memory Game</h3></a>
+				<p>Find matching emoji pairs, tap cards to match and flip them , match all pairs to win!</p>
+                <button class="play-btn">PLAY NOW</button>
+                <button class="embed-btn">SHOW EMBED CODE</button>
+                <div class="embed-section">
+                    <textarea class="embed-code" readonly onclick="this.select()"></textarea>
+                </div>
+            </div>
+        </div>   <!-- end copy -->		
+		<!-- start copy -->  
+<div class="game-card" data-game-url="https://kiddogames.pages.dev/soccer-free-kick">
+            <img src="soccer-free-kick.png" alt="Kids Game">
+            <div class="game-info">
+              <a href="https://kiddogames.pages.dev/soccer-free-kick">  <h3>⚽️Soccer Free Kick</h3></a>
+				<p>Find the matching card: Click/Tap another card to try and find the matching emoji.</p>
+                <button class="play-btn">PLAY NOW</button>
+                <button class="embed-btn">SHOW EMBED CODE</button>
+                <div class="embed-section">
+                    <textarea class="embed-code" readonly onclick="this.select()"></textarea>
+                </div>
+            </div>
+        </div>   <!-- end copy -->	
+    </div>
+	<div class="footer">
+    <a href="/">Home</a>
+    <a href="about-us">About Us</a>
+    <a href="privacy-policy">Privacy Policy</a>
+    <a href="terms-of-use">Terms of Use</a>
+    <a href="contact-us">Contact Us</a>
+</div>
+    <script>
+        // Dark Mode Toggle
+        const darkToggle = document.querySelector('.dark-toggle');
+        darkToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            darkToggle.textContent = document.body.classList.contains('dark-mode') ? '🌞' : '🌓';
+        });
+
+        // Search Functionality
+        const searchBox = document.querySelector('.search-box');
+        const gameCards = document.querySelectorAll('.game-card');
+
+        searchBox.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            gameCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                card.style.display = title.includes(searchTerm) ? 'block' : 'none';
+            });
+        });
+
+        // Embed Code Functionality
+        document.querySelectorAll('.game-card').forEach(card => {
+            const embedBtn = card.querySelector('.embed-btn');
+            const embedSection = card.querySelector('.embed-section');
+            const embedCode = card.querySelector('.embed-code');
+            const gameUrl = card.dataset.gameUrl;
+
+            embedBtn.addEventListener('click', () => {
+                const isShowing = embedSection.style.display === 'block';
+                embedSection.style.display = isShowing ? 'none' : 'block';
+                embedBtn.textContent = isShowing ? 'SHOW EMBED CODE' : 'HIDE EMBED CODE';
+                
+                if (!isShowing) {
+                    embedCode.value = `<iframe src="${gameUrl}" width="600" height="400" frameborder="0" allowfullscreen></iframe>`;
+                }
+            });
+        });
+
+        // Play Button Functionality
+        document.querySelectorAll('.play-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const gameUrl = btn.closest('.game-card').dataset.gameUrl;
+                window.open(gameUrl, '_blank');
+            });
+        });
+  
+   
+</script>
+</body>
+</html>
