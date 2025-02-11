@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Play educational kid-friendly game suitable for kids or elementary school students">
+    <meta name="keywords" content="education game, maths play, pbs kids games, and fun game, math games for kids, kindergarten games, minecraft education, minecraft education edition, endless alphabet, emoji game, html game, html5 games, html canvas game, hooda math game, jumping zombie, HTML Game Example, Top HTML5 games, JavaScript Game, emojis games">
+    <title>About Kiddo Games</title>
+    <link rel="icon" href="games-icon.png" type="image/png">
+    <style>
+        :root {
+    --bg-color: #ffffff; /* Default background color */
+    --text-color: #000000; /* Default text color */
+    --accent-color: #000000;
+    --card-bg: #f0f0f0; /* Lighter card background */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+     background: linear-gradient(135deg, #a8edea, #fed6e3);
+    color: var(--text-color);
+}
+
+.dark-mode {
+    --bg-color: #1a1a1a;
+    --text-color: #ffc83d;
+    --card-bg: #2d2d2d;
+}
+
+.light-mode {
+    --bg-color: #ffffff;
+    --text-color: #000000; /* Ensure text remains black */
+    --card-bg: #f0f0f0; /* Light card background */
+}
+
+nav {
+    padding: 1rem 5%;
+    background: #2d2d2d;
+    display: flex;
+    color: #ffffff;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: yellow;
+}
+
+.nav-links a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-left: 1rem;
+}
+
+.search-box {
+    padding: 0.5rem;
+    border-radius: 20px;
+    border: 2px solid white;
+    background: transparent;
+    color: white;
+}
+
+.games-grid {
+    display: absolute;
+	width: 90%;
+    gap: 20rem;
+	margin-left: 10%;
+    padding: 2rem 5%;
+}
+
+.game-card {
+    background: var(--card-bg);
+	width: 90%;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.8);
+}
+
+.game-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.game-info {
+    padding: 1rem;
+}
+
+.play-btn {
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 1rem;
+    display: block;
+    width: 100%;
+}
+
+.dark-toggle {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.embed-section {
+    margin-top: 1rem;
+    display: none;
+}
+
+.embed-code {
+    width: 100%;
+    height: 50px;
+    padding: 0.8rem;
+    background: var(--card-bg);
+    border: 1px solid var(--accent-color);
+    border-radius: 8px;
+    color: #000000;
+    font-family: monospace;
+    font-size: 0.8rem;
+    resize: none;
+    cursor: pointer;
+}
+
+.embed-code:focus {
+    outline: none;
+    box-shadow: 0 0 5px var(--accent-color);
+}
+a {
+text-decoration: none;
+color: black;
+}
+
+.embed-btn {
+    background: transparent;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+.embed-btn:hover {
+    background: rgba(0, 255, 136, 0.1);
+}
+
+/* Style for h1 */
+h1 {
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+    -webkit-background-clip: text; /* For Safari */
+    -webkit-text-fill-color: transparent; /* For Safari */
+    color: transparent; /* Fallback color */
+    font-size: 2rem; /* Equivalent to H2 size */
+    text-align: center; /* Center the text */
+    padding: 20px; /* Add some padding */
+    margin: 20px 0; /* Add margin above and below */
+    border-radius: 10px; /* Optional: rounded corners */
+}
+
+/* Media query for responsive design */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+}
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">😍Kiddo Games</div>
+        <div class="nav-links">
+           <a href="/">Home</a>
+            <a href="about-us">About Us</a>
+            <a href="privacy-policy">Privacy Policy</a>
+            <a href="terms-of-use">Terms of Use</a>
+			 <a href="contact-us">Contact Us</a>
+			
+        </div>
+        <input type="text" class="search-box" placeholder="🔍 Search games...">
+        <button class="dark-toggle">🌓</button>
+    </nav>
+
+    <div class="games-grid">
+        <div class="game-card">
+     
+            <div class="game-info">
+              <h2>About Us</h2>
+<p>Welcome to <strong>Kiddo Games</strong>!</p>
+<p>At Kiddo Games, we believe that learning can be fun and engaging. Our mission is to provide a safe and enjoyable online platform where children and elementary school students can explore educational games that stimulate their minds and inspire their creativity.</p>
+<br/><h3>Who We Are</h3>
+<p>We are a passionate team of educators, game developers, and parents dedicated to creating high-quality, kid-friendly games. Our games are designed to make learning enjoyable and interactive, using vibrant emojis and captivating gameplay to keep children engaged.</p>
+<br/><h3>What We Offer</h3>
+<ul>
+<li>
+<p><strong>Educational Games</strong>: Our collection features a variety of games that focus on subjects such as math, language, science, and more. Each game is crafted to enhance critical thinking and problem-solving skills while providing hours of entertainment.</p>
+</li>
+<li>
+<p><strong>Safe Environment</strong>: We prioritize the safety of our young users. All our games are kid-friendly, ensuring a positive and secure gaming experience.</p>
+</li>
+<li>
+<p><strong>Accessible Learning</strong>: Kiddo Games can be played on various devices, making it easy for kids to learn and play at home or on the go.</p>
+</li>
+</ul>
+<br/><h3>Join Us</h3>
+<p>We invite you to explore our games and discover the joy of learning through play. Whether your child is looking to improve their skills or simply have fun, Kiddo Games is the perfect place to start their educational journey.</p>
+<p>Thank you for choosing Kiddo Games—where fun meets learning!</p>
+				
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        // Dark Mode Toggle
+        const darkToggle = document.querySelector('.dark-toggle');
+        darkToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            darkToggle.textContent = document.body.classList.contains('dark-mode') ? '🌞' : '🌓';
+        });
+
+        // Search Functionality
+        const searchBox = document.querySelector('.search-box');
+        const gameCards = document.querySelectorAll('.game-card');
+
+        searchBox.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            gameCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                card.style.display = title.includes(searchTerm) ? 'block' : 'none';
+            });
+        });
+
+        // Embed Code Functionality
+        document.querySelectorAll('.game-card').forEach(card => {
+            const embedBtn = card.querySelector('.embed-btn');
+            const embedSection = card.querySelector('.embed-section');
+            const embedCode = card.querySelector('.embed-code');
+            const gameUrl = card.dataset.gameUrl;
+
+            embedBtn.addEventListener('click', () => {
+                const isShowing = embedSection.style.display === 'block';
+                embedSection.style.display = isShowing ? 'none' : 'block';
+                embedBtn.textContent = isShowing ? 'SHOW EMBED CODE' : 'HIDE EMBED CODE';
+                
+                if (!isShowing) {
+                    embedCode.value = `<iframe src="${gameUrl}" width="600" height="400" frameborder="0" allowfullscreen></iframe>`;
+                }
+            });
+        });
+
+        // Play Button Functionality
+        document.querySelectorAll('.play-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const gameUrl = btn.closest('.game-card').dataset.gameUrl;
+                window.open(gameUrl, '_blank');
+            });
+        });
+  
+    // Function to create and append the footer
+    function createFooter() {
+        const footer = document.createElement('footer');
+        footer.style.textAlign = 'center';
+        footer.style.padding = '1rem 0';
+        footer.style.backgroundColor = '#2d2d2d'; // Light background for footer
+        footer.style.color = '#f88606'; // Dark text color for footer
+
+        const currentYear = new Date().getFullYear();
+        const copyrightText = document.createElement('p');
+        copyrightText.innerHTML = `&copy; ${currentYear} <a href="https://example.com" target="_blank" style="color: inherit; text-decoration: underline;">AIKU</a>. All rights reserved.`;
+
+        footer.appendChild(copyrightText);
+        document.body.appendChild(footer);
+    }
+
+    // Call the function to create the footer
+    createFooter();
+</script>
+</body>
+</html>

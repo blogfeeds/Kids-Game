@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soccer Free Kick 🥅⚽️</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #7CFC00, #32CD32);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #gameCanvas {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        #scoreBoard {
+            font-size: 24px;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        #instructions {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+        #startButton {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        #startButton:hover {
+            background-color: #45a049;
+        }
+        footer {
+            position: fixed;
+            bottom: 10px;
+            font-size: 12px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        #goalOverlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 72px;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div id="scoreBoard">Score: 0 | Level: 1</div>
+    <canvas id="gameCanvas"></canvas>
+    <div id="instructions">
+        <h2>Soccer Free Kick 🥅⚽️</h2>
+        <p>Click or tap the ball ⚽️ to kick it towards the moving goal 🥅</p>
+        <p>Score points by getting the ball into the goal!</p>
+        <p>The goal moves faster with each level. How far can you go?</p>
+        <button id="startButton">Start Game</button>
+    </div>
+    <div id="goalOverlay">GOAL! 🥳🎉</div>
+    <footer>More games at <a href="http://www.example.com" target="_blank" style="color: white;">www.example.com</a></footer>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreBoard = document.getElementById('scoreBoard');
+        const instructions = document.getElementById('instructions');
+        const startButton = document.getElementById('startButton');
+        const goalOverlay = document.getElementById('goalOverlay');
+
+        let score = 0;
+        let level = 1;
+        let goalDirection = 1;
+        let goalSpeed = 2;
+        let ballShot = false;
+        let gameStarted = false;
+
+        const ball = { x: 0, y: 0, size: 30, speedY: 0 };
+        const goal = { x: 0, y: 50, width: 80, height: 60 };
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth * 0.9;
+            canvas.height = window.innerHeight * 0.7;
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height - ball.size;
+            goal.x = canvas.width / 2;
+        }
+
+        function drawBall() {
+            ctx.font = `${ball.size}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('⚽️', ball.x, ball.y);
+        }
+
+        function drawGoal() {
+            ctx.font = `${goal.height}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            ctx.fillText('🥅', goal.x, goal.y);
+        }
+
+        function updateGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            goal.x += goalDirection * goalSpeed;
+            if (goal.x > canvas.width - goal.width / 2 || goal.x < goal.width / 2) {
+                goalDirection *= -1;
+            }
+
+            if (ballShot) {
+                ball.y -= ball.speedY;
+                ball.speedY *= 0.99;
+
+                if (ball.y <= goal.y + goal.height && 
+                    Math.abs(ball.x - goal.x) < goal.width / 2) {
+                    score++;
+                    level++;
+                    goalSpeed += 0.5;
+                    updateScoreBoard();
+                    showGoalAnimation();
+                    resetBall();
+                }
+
+                if (ball.y < 0) {
+                    resetBall();
+                }
+            }
+
+            drawGoal();
+            drawBall();
+
+            requestAnimationFrame(updateGame);
+        }
+
+        function resetBall() {
+            ball.y = canvas.height - ball.size;
+            ball.x = canvas.width / 2;
+            ball.speedY = 0;
+            ballShot = false;
+        }
+
+        function updateScoreBoard() {
+            scoreBoard.textContent = `Score: ${score} | Level: ${level}`;
+        }
+
+        function shootBall() {
+            if (!ballShot && gameStarted) {
+                ballShot = true;
+                ball.speedY = 10;
+            }
+        }
+
+        function showGoalAnimation() {
+            goalOverlay.style.opacity = '1';
+            goalOverlay.style.transform = 'translate(-50%, -50%) scale(1.2)';
+            setTimeout(() => {
+                goalOverlay.style.opacity = '0';
+                goalOverlay.style.transform = 'translate(-50%, -50%) scale(1)';
+            }, 1500);
+        }
+
+        canvas.addEventListener('click', shootBall);
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            shootBall();
+        });
+
+        window.addEventListener('resize', resizeCanvas);
+
+        startButton.addEventListener('click', () => {
+            gameStarted = true;
+            instructions.style.display = 'none';
+            resizeCanvas();
+            updateGame();
+        });
+
+        instructions.style.display = 'block';
+    </script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji Memory Match 🧠</title>
+    <style>
+        /* Previous styles remain the same */
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            font-family: 'Comic Sans MS', cursive;
+            touch-action: manipulation;
+        }
+
+        .game-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .card {
+            width: 15vw;
+            height: 15vw;
+            max-width: 100px;
+            max-height: 100px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: transform 0.6s, background 0.3s;
+            transform-style: preserve-3d;
+        }
+
+        .card.flipped {
+            background: #ffeb3b;
+            transform: rotateY(180deg);
+        }
+
+        .card.matched {
+            background: #a5d6a7;
+            transform: scale(0.95);
+        }
+
+        .hud {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+
+        .instructions {
+            background: rgba(255,255,255,0.9);
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            max-width: 300px;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <h2>How to Play 🌟</h2>
+        <p>Find matching emoji pairs!</p>
+        <p>Tap cards to flip them</p>
+        <p>Match all pairs to win!</p>
+        <button onclick="startGame()">Start Game!</button>
+    </div>
+
+    <div class="game-container" style="display: none;"></div>
+    <div class="hud">
+        <div>Time: <span id="timer">0</span>s</div>
+        <div>Moves: <span id="moves">0</span></div>
+    </div>
+
+<script>
+const emojiPool = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', 
+                  '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐧'];
+let firstCard = null, secondCard = null;
+let moves = 0, time = 0, timerId;
+
+function getRandomEmojis() {
+    // Select 8 unique random emojis from the pool
+    const shuffled = [...emojiPool].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, 8);
+}
+
+function startGame() {
+    document.querySelector('.instructions').style.display = 'none';
+    document.querySelector('.game-container').style.display = 'grid';
+    clearInterval(timerId);
+    time = 0;
+    moves = 0;
+    document.getElementById('timer').textContent = '0';
+    document.getElementById('moves').textContent = '0';
+    initGame();
+    timerId = setInterval(() => {
+        time++;
+        document.getElementById('timer').textContent = time;
+    }, 1000);
+}
+
+function createCard(emoji) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.textContent = emoji;
+    card.dataset.value = emoji;
+    card.addEventListener('click', handleCardClick);
+    card.addEventListener('touchstart', handleCardClick);
+    return card;
+}
+
+function handleCardClick(e) {
+    e.preventDefault();
+    const card = e.currentTarget;
+    if (card === firstCard || card.classList.contains('matched')) return;
+
+    card.classList.add('flipped');
+    
+    if (!firstCard) {
+        firstCard = card;
+    } else {
+        moves++;
+        document.getElementById('moves').textContent = moves;
+        secondCard = card;
+        checkMatch();
+    }
+}
+
+function checkMatch() {
+    const isMatch = firstCard.dataset.value === secondCard.dataset.value;
+    
+    if (isMatch) {
+        firstCard.classList.add('matched');
+        secondCard.classList.add('matched');
+        if (document.querySelectorAll('.matched').length === 16) {
+            clearInterval(timerId);
+            setTimeout(() => {
+                alert(`You won in ${time} seconds! Starting new game...`);
+                startGame();
+            }, 100);
+        }
+    } else {
+        setTimeout(() => {
+            firstCard.classList.remove('flipped');
+            secondCard.classList.remove('flipped');
+        }, 1000);
+    }
+    
+    firstCard = secondCard = null;
+}
+
+function initGame() {
+    const gameContainer = document.querySelector('.game-container');
+    gameContainer.innerHTML = '';
+    const currentEmojis = getRandomEmojis();
+    const gameEmojis = [...currentEmojis, ...currentEmojis]
+        .sort(() => Math.random() - 0.5)
+        .forEach(emoji => gameContainer.appendChild(createCard(emoji)));
+}
+
+// Add example domain footer
+const footer = document.createElement('div');
+footer.style.cssText = `
+    margin-top: auto;
+    padding: 1rem;
+    color: #666;
+    font-size: 0.8rem;
+`;
+footer.innerHTML = 'More examples at <a href="http://www.example.com">www.example.com</a>';
+document.body.appendChild(footer);
+</script>
+</body>
+</html>

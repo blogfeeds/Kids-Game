@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors game for kids vs AI ✊🖐️✌️</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(to bottom, #ffb3ba, #ffdfba, #ffffba);
+            font-family: 'Segoe UI', sans-serif;
+            touch-action: manipulation;
+        }
+
+        .game-container {
+            text-align: center;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .hands {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+            margin: 2rem 0;
+        }
+
+        .computer-hand, .player-hand {
+            font-size: 4rem;
+            transition: transform 0.3s;
+        }
+.vs-display {
+            font-size: 2rem;
+            transition: transform 0.3s;
+        }
+        .choices {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .choice-btn {
+            background: none;
+            border: none;
+            font-size: 3rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            padding: 0 1rem;
+        }
+
+        .choice-btn.selected {
+            animation: bounce 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        #result {
+            font-size: 2rem;
+            margin: 1rem 0;
+            min-height: 3rem;
+        }
+
+        .instructions {
+            background: rgba(255,255,255,0.9);
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 300px;
+            text-align: center;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <h2>How to Play 🌟</h2>
+        <p>Choose your weapon:</p>
+        <p>✊ Rock beats ✌️</p>
+        <p>🖐️ Paper beats ✊</p>
+        <p>✌️ Scissors beat 🖐️</p>
+        <button onclick="startGame()">Start Game!</button>
+    </div>
+
+    <div class="game-container" style="display: none;">
+        <div class="hands">
+            <div class="computer-hand">AI</div>
+            <div class="vs-display">🆚</div>
+            <div class="player-hand">YOU!</div>
+        </div>
+        <div class="choices">
+            <button class="choice-btn" data-type="rock">✊</button>
+            <button class="choice-btn" data-type="paper">🖐️</button>
+            <button class="choice-btn" data-type="scissors">✌️</button>
+        </div>
+        <div id="result"></div>
+    </div>
+
+<script>
+function startGame() {
+    document.querySelector('.instructions').style.display = 'none';
+    document.querySelector('.game-container').style.display = 'block';
+}
+
+function computerChoice() {
+    const choices = ['rock', 'paper', 'scissors'];
+    return choices[Math.floor(Math.random() * 3)];
+}
+
+function playRound(playerChoice) {
+    const buttons = document.querySelectorAll('.choice-btn');
+    buttons.forEach(btn => btn.classList.remove('selected'));
+    event.target.classList.add('selected');
+
+    const computer = computerChoice();
+    const result = document.getElementById('result');
+    const computerHand = document.querySelector('.computer-hand');
+    const playerHand = document.querySelector('.player-hand');
+
+    // Show choices simultaneously
+    computerHand.textContent = getEmoji(computer);
+    playerHand.textContent = getEmoji(playerChoice);
+
+    setTimeout(() => {
+        let outcome;
+        if (playerChoice === computer) {
+            outcome = "Draw! 🤝";
+        } else if (
+            (playerChoice === 'rock' && computer === 'scissors') ||
+            (playerChoice === 'paper' && computer === 'rock') ||
+            (playerChoice === 'scissors' && computer === 'paper')
+        ) {
+            outcome = "You win! 🎉";
+        } else {
+            outcome = "AI wins! 🤖";
+        }
+
+        result.innerHTML = `${outcome}`;
+    }, 500);
+}
+
+function getEmoji(choice) {
+    return {
+        rock: '✊',
+        paper: '🖐️',
+        scissors: '✌️'
+    }[choice];
+}
+
+// Event listeners
+document.querySelectorAll('.choice-btn').forEach(button => {
+    button.addEventListener('click', () => playRound(button.dataset.type));
+    button.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        playRound(button.dataset.type);
+    });
+});
+
+// Add footer linking to Example Domain
+const footer = document.createElement('div');
+footer.style.cssText = `
+    margin-top: auto;
+    padding: 1rem;
+    color: #666;
+    font-size: 0.8rem;
+`;
+footer.innerHTML = 'More fun games at <a href="http://www.example.com">www.example.com</a>';
+document.body.appendChild(footer);
+</script>
+</body>
+</html>

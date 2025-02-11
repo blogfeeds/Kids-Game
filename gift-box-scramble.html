@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Box Scramble</title>
+	<meta name="description" content="When the game starts, you'll see three gift boxes 🎁 Click or tap on one of the boxes to reveal its contents.">
+	<meta name="keywords" content="html game, html5 games, html canvas game, hooda math game, jumping zombie, HTML Game Example, Top HTML5 games, JavaScript Game, gift box game">
+    <style>
+body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #fff;
+        }
+        .game-container {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .boxes {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .box {
+            font-size: 4rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, transform-origin 0.3s ease;
+            user-select: none;
+        }
+        .box:hover {
+            transform: scale(1.1);
+        }
+        .message {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            height: 30px;
+        }
+        .score {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        .restart {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .restart:hover {
+            background: #45a049;
+        }
+        footer {
+            position: fixed;
+            bottom: 10px;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        footer a {
+            color: #fff;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 480px) {
+            .boxes {
+                flex-direction: column;
+                align-items: center;
+            }
+            .box {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Gift Box Scramble</h1>
+        <div class="boxes" id="boxes"></div>
+        <div class="message" id="message"></div>
+        <div class="score" id="score">Score: 0</div>
+        <button class="restart" id="restart">New Game</button>
+    </div>
+
+    <script>
+        const boxes = document.getElementById('boxes');
+        const message = document.getElementById('message');
+        const scoreElement = document.getElementById('score');
+        const restartBtn = document.getElementById('restart');
+
+        const prizes = ['🐹', '💩', '💰'];
+        let score = 0;
+        let gameActive = true;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function createBoxes() {
+            boxes.innerHTML = '';
+            let shuffledPrizes = [...prizes];
+            shuffleArray(shuffledPrizes);
+
+            for (let i = 0; i < 3; i++) {
+                const box = document.createElement('div');
+                box.classList.add('box');
+                box.textContent = '🎁';
+                box.dataset.prize = shuffledPrizes[i];
+                box.addEventListener('click', () => revealBox(box));
+                boxes.appendChild(box);
+            }
+
+            animateBoxes();
+        }
+
+        function animateBoxes() {
+            const boxElements = document.querySelectorAll('.box');
+            boxElements.forEach((box, index) => {
+                box.style.transformOrigin = 'center bottom';
+                box.animate([
+                    { transform: 'rotateY(0deg) translateY(0)' },
+                    { transform: 'rotateY(360deg) translateY(-20px)' },
+                    { transform: 'rotateY(720deg) translateY(0)' }
+                ], {
+                    duration: 1000 + index * 200,
+                    easing: 'ease-in-out',
+                    iterations: 1
+                });
+            });
+        }
+
+        function revealBox(box) {
+            if (!gameActive) return;
+
+            gameActive = false;
+            const prize = box.dataset.prize;
+            box.textContent = prize;
+
+            setTimeout(() => {
+                if (prize === '💰') {
+                    message.textContent = 'Congratulations! You won money! 🎉';
+                    score += 100;
+                } else if (prize === '🐹') {
+                    message.textContent = 'You found a cute mouse! 🐹';
+                    score += 50;
+                } else {
+                    message.textContent = 'Oh no! You got a poop! 😱';
+                    score -= 50;
+                }
+                scoreElement.textContent = `Score: ${score}`;
+
+                boxes.childNodes.forEach(box => {
+                    box.textContent = box.dataset.prize;
+                });
+
+                setTimeout(() => {
+                    message.textContent = 'Click "New Game" to play again!';
+                }, 1500);
+            }, 500);
+        }
+
+        function startNewGame() {
+            gameActive = true;
+            message.textContent = '';
+            createBoxes();
+        }
+
+        restartBtn.addEventListener('click', startNewGame);
+
+        // Create footer with copyright
+        function createFooter() {
+            const footer = document.createElement('footer');
+            const currentYear = new Date().getFullYear();
+            footer.innerHTML = `&copy; ${currentYear} <a href="https://example.com" target="_blank">Gift Box Scramble</a>`;
+            document.body.appendChild(footer);
+        }
+
+        createFooter();
+        startNewGame();
+    </script>
+</body>
+</html>

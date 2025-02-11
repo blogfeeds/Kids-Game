@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Trivia Game - Kids Game</title>
+	 <meta name="keywords" content="education game, maths play, pbs kids games, and fun game, math games for kids, kindergarten games, minecraft education, minecraft education edition, endless alphabet, emoji game, html game, html5 games, html canvas game, hooda math game, jumping zombie, HTML Game Example, Top HTML5 games, JavaScript Game">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+             background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            font-family: Arial, sans-serif;
+            color: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);;
+            overflow: hidden;
+        }
+        canvas {
+            border: 2px solid #333;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            position: relative;
+            z-index: 1;
+			text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+		h1 {
+    
+    color: white; /* Fallback color */
+    font-size: 28px; /* Adjust size as needed */
+    text-align: center; /* Center the text */
+    padding: 20px; /* Add some padding */
+    margin: -20px 0; /* Add margin above and below */
+    border-radius: 10px; /* Optional: rounded corners */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Optional: shadow for depth */
+}
+        form {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 2;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555;
+        }
+        footer {
+            position: absolute;
+            bottom: 10px;
+            font-size: 12px;
+			color: white;
+            z-index: 2;
+        }
+        .rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .correct-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 30px;
+            color: green;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+		 .wrong-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 30px;
+            color: red;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        @keyframes rain {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+<h1>PHYSICS TRIVIA GAME</h1>
+<canvas id="gameCanvas" width="320" height="480">
+</canvas>
+<form id="answerForm">
+    <input type="text" id="answerInput" placeholder="Type your answer..." required />
+    <button type="submit">Submit Answer</button>
+	<p><small>*It's case sensitive</small>
+</form>
+<div class="rain"></div>
+<div class="correct-message" id="correctMessage">✔️CORRECT!</div>
+<div class="wrong-message" id="wrongMessage">❌WRONG!</div>
+<footer>More games at <a href="https://emojigame.pages.dev/"><font color="white">Emoji Games</font></a></footer>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const answerForm = document.getElementById('answerForm');
+    const answerInput = document.getElementById('answerInput');
+    const correctMessage = document.getElementById('correctMessage');
+	const wrongMessage = document.getElementById('wrongMessage');
+
+    let score = 0;
+    let questionIndex = 0;
+const questions = [
+    { question: "What is the force that pulls objects toward the Earth?", answer: "gravity" },
+    { question: "What is the unit of force?", answer: "newton" },
+    { question: "What do we call the energy of motion?", answer: "kinetic" },
+    { question: "What is the opposite of motion?", answer: "rest" },
+    { question: "What is the energy stored in an object due to its position?", answer: "potential" },
+    { question: "What is the term for the amount of matter in an object?", answer: "mass" },
+    { question: "What is the term for a push or pull?", answer: "force" },
+    { question: "What do we call the change in position of an object?", answer: "motion" },
+    { question: "What is the state of matter that has a definite shape?", answer: "solid" },
+    { question: "What is the effect of friction?", answer: "resistance" },
+    { question: "What do we call a material that allows electricity to pass through?", answer: "conductor" },
+    { question: "What is the term for the path an object takes?", answer: "trajectory" },
+    { question: "What is the measure of how hot or cold something is?", answer: "temperature" },
+    { question: "What do we call a simple machine that helps lift heavy objects?", answer: "lever" },
+    { question: "What is the process of converting liquid into gas?", answer: "evaporation" },
+    { question: "What is the name of the instrument used to measure temperature?", answer: "thermometer" },
+    { question: "What is the term for the straight-line distance between two points?", answer: "displacement" },
+    { question: "What is the name of the force that keeps planets in orbit?", answer: "gravity" },
+    { question: "What is the term for a push against a surface?", answer: "thrust" },
+    { question: "What is the term for the energy of an object in motion?", answer: "kinetic" },
+    { question: "What is the state of matter that has no definite shape?", answer: "gas" }
+];
+
+    function showQuestion() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.font = '13px Arial';
+        ctx.fillStyle = '#333';
+        ctx.fillText(questions[questionIndex].question, 10, 50);
+        ctx.fillText(`Correct Answer: ${score} 🏆`, 10, 100);
+    }
+
+    function checkAnswer(answer) {
+    if (answer.toLowerCase() === questions[questionIndex].answer) {
+        score++;
+        correctMessage.style.opacity = 1; // Show correct message
+        setTimeout(() => {
+            correctMessage.style.opacity = 0; // Hide after a moment
+        }, 1000);
+
+        questionIndex++;
+        if (questionIndex >= questions.length) {
+            alert('You finished the game! Your score: ' + score);
+            questionIndex = 0;
+            score = 0;
+        }
+    } else {
+        wrongMessage.style.opacity = 1; // Show wrong message
+        setTimeout(() => {
+            wrongMessage.style.opacity = 0; // Hide after a moment
+        }, 1000);
+    }
+    showQuestion();
+}
+    answerForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const userAnswer = answerInput.value;
+        checkAnswer(userAnswer);
+        answerInput.value = '';
+    });
+
+    function createRain() {
+        const rainContainer = document.querySelector('.rain');
+        for (let i = 0; i < 30; i++) {
+            const emoji = document.createElement('span');
+            emoji.textContent = '💫️'; // Rain emoji
+            emoji.style.position = 'absolute';
+            emoji.style.left = Math.random() * 100 + 'vw';
+            emoji.style.top = Math.random() * 100 + 'vh';
+            emoji.style.fontSize = Math.random() * 30 + 10 + 'px';
+            emoji.style.opacity = Math.random();
+            rainContainer.appendChild(emoji);
+            setTimeout(() => {
+                emoji.remove();
+            }, 3000);
+        }
+    }
+
+    setInterval(createRain, 500);
+
+    showQuestion();
+</script>
+
+</body>
+</html>

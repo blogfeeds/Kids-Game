@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fruits Collector</title>
+    <style>
+        body, html {
+            background-color: #f0f0f0; /* Light background */
+            margin: 0;
+            overflow: hidden; /* Prevent scrollbars */
+            display: flex;
+			width: 100%;
+			height: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* Ensure full viewport height */
+            font-family: sans-serif; /* Modern font */
+        }
+
+        #game-container {
+            position: relative;
+            background: linear-gradient(to bottom, #ffb3ba, #ffdfba, #ffffba);
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            overflow: hidden; /* Clip falling emojis */
+			width: 100%;
+			height: 100%;
+			color: #fff;
+        }
+        
+        #game-canvas {
+            display: block; /* Prevent canvas from creating a small gap */
+        }
+
+        #footer {
+            margin-top: 20px;
+            font-size: 0.8em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+    </div>
+
+    <div id="footer">More games at www.example.com</div>
+
+    <script>
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const gameContainer = document.getElementById('game-container');
+
+        let score = 0;
+        let emojis = [];
+        const player = { x: 0, y: 0, width: 50, height: 50, emoji: "🗑️" }; // Player emoji
+        let lastFrameTime = 0;
+
+        function resizeCanvas() {
+            canvas.width = gameContainer.offsetWidth;
+            canvas.height = gameContainer.offsetHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas(); // Initial resize
+
+        // Touch controls
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Prevent default touch behavior (scrolling)
+            const touch = e.touches[0];
+            player.x = touch.clientX - gameContainer.offsetLeft - player.width / 2;
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            player.x = touch.clientX - gameContainer.offsetLeft - player.width / 2;
+        });
+
+        // Mouse controls
+        canvas.addEventListener('mousemove', (e) => {
+            player.x = e.clientX - gameContainer.offsetLeft - player.width / 2;
+        });
+
+        // Emoji falling logic
+        function createEmoji() {
+            emojis.push({
+                x: Math.random() * canvas.width,
+                y: -50, // Start above the canvas
+                speed: Math.random() * 3 + 1, // Varying speed
+                emoji: getRandomEmoji()
+            });
+        }
+
+        function getRandomEmoji() {
+            const availableEmojis = ["🍎", "🍇", "🍌", "🍒", "🍓", "🍉", "🥝", "🍊", "🍋"]; // More emojis
+            return availableEmojis[Math.floor(Math.random() * availableEmojis.length)];
+        }
+
+
+        function update(currentTime) {
+            const deltaTime = currentTime - lastFrameTime;
+            lastFrameTime = currentTime;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Update and draw emojis
+            for (let i = emojis.length - 1; i >= 0; i--) {
+                const emoji = emojis[i];
+                emoji.y += emoji.speed;
+
+                ctx.font = "40px Arial"; // Larger emojis
+                ctx.fillText(emoji.emoji, emoji.x, emoji.y);
+
+                // Collision detection (simplified)
+                if (emoji.y + 40 > player.y && emoji.y < player.y + player.height &&
+                    emoji.x + 40 > player.x && emoji.x < player.x + player.width) {
+                    emojis.splice(i, 1);
+                    score++;
+                }
+
+                if (emoji.y > canvas.height) {
+                    emojis.splice(i, 1); // Remove if off-screen
+                }
+            }
+
+            // Draw player
+            ctx.font = "50px Arial";
+            ctx.fillText(player.emoji, player.x, player.y);
+
+            // Draw score
+            ctx.font = "20px Arial";
+            ctx.fillStyle = "#333";
+            ctx.fillText(`Fruit Collected: ${score}`, 10, 30);
+
+            requestAnimationFrame(update);
+        }
+
+        setInterval(createEmoji, 1000); // Create emojis regularly
+        player.y = canvas.height - player.height - 20; // Position player at the bottom
+
+        update(0); // Start the game loop
+
+        // How to play instructions (can be displayed initially or in a separate element)
+        alert("Catch the falling fruits with your basket! Use your mouse or touch to move.  The more fruits you catch, the higher your score!");
+
+
+    </script>
+
+</body>
+</html>

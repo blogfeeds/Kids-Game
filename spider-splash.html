@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spider Splash! 🕷️💦</title>
+    <style>
+        /* Add custom cursor */
+        #gameCanvas {
+            cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAAZdEVYdFNvZnR3YXJlAHd3dy5pbmtzY2FwZS5vcmeb7jwaAAABKUlEQVRYR+2W0QqDMAxE0/7/T5cfLYK2SFPXvghC4L0mN3FJtVrrL5xwQh4hD5BHSH4Bq7XWvXLO3Tvn3L1zzr3v+3Hf9w8B+QWs1lqP67oO7z7P8/DO8zw8BEB+Aau11uM4jsM7juPw9v0cHgIgv4DVWutx2/bD27ZteNu6Dg8BkF/Aaq31WNd1eOu6Dm9ZluEhAPILWK21HsuyDG9ZluHN8zw8BEB+Aau11mOapuFN0zS8cRyHhwDIL2C11nqM4zi8YRiG1/f98BAA+QWs1lqPruuG13Xd8Nq2HR4CIL+A1Vrr0TTN8JqmGV7TNMNDAOQXsFprPWqtD6+UMjwEQH4Bq7XW4ziOw3PO3Tvn7p1z7t45d++cc/fOOXfvnHP3zjl375xz9845d++cc/fOOXfvnHP3zjl375xz9845d++cc/fOOXfvnHP3zjl3D5H8AlZrrT/0Bq+2N3cHt0jZAAAAAElFTkSuQmCC') 7 0, pointer;
+        }
+        /* Keep previous styles */
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #ffb3ba, #ffdfba, #ffffba);
+            touch-action: none;
+            font-family: 'Comic Sans MS', cursive;
+        }
+        #hud {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: #333;
+            font-size: 24px;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div id="hud">Killed Spider: <span id="score">0</span></div>
+
+<script>
+// Previous JavaScript code remains the same until...
+
+// Add custom cursor creation
+function createFingerCursor() {
+    const cursorCanvas = document.createElement('canvas');
+    cursorCanvas.width = 32;
+    cursorCanvas.height = 32;
+    const ctx = cursorCanvas.getContext('2d');
+    
+    // Draw finger emoji
+    ctx.font = '28px serif';
+    ctx.fillText('👆', 2, 28);
+    
+    // Convert to data URL
+    return cursorCanvas.toDataURL();
+}
+
+// Update canvas cursor
+const canvas = document.getElementById('gameCanvas');
+canvas.style.cursor = `url(${createFingerCursor()}) 7 0, pointer`;
+
+// Rest of the original JavaScript code follows...
+const ctx = canvas.getContext('2d');
+let score = 0;
+
+// Responsive setup
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+class Spider {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.speed = Math.random() * 2 + 1;
+        this.size = 40;
+        this.angle = 0;
+        this.isSplashed = false;
+    }
+
+    update() {
+        if(!this.isSplashed) {
+            this.x += Math.cos(this.angle) * this.speed;
+            this.y += Math.sin(this.angle) * this.speed;
+            this.angle += (Math.random() - 0.5) * 0.1;
+            
+            // Bounce off walls
+            if(this.x < 0 || this.x > canvas.width) this.angle = Math.PI - this.angle;
+            if(this.y < 0 || this.y > canvas.height) this.angle = -this.angle;
+        } else {
+            this.y -= 2; // Bubble float up
+        }
+    }
+
+    draw() {
+        ctx.font = `${this.size}px serif`;
+        ctx.fillText(this.isSplashed ? '🫧' : '🕷️', this.x, this.y);
+    }
+}
+
+// Game elements
+let spiders = Array(10).fill().map(() => new Spider());
+
+// Input handling
+function handleClick(x, y) {
+    spiders.forEach(spider => {
+        if(!spider.isSplashed && 
+           Math.abs(x - spider.x) < spider.size/2 &&
+           Math.abs(y - spider.y) < spider.size/2) {
+            spider.isSplashed = true;
+            score += 1;
+            document.getElementById('score').textContent = score;
+            setTimeout(() => {
+                Object.assign(spider, new Spider());
+            }, 1000);
+        }
+    });
+}
+
+// Event listeners
+canvas.addEventListener('mousedown', (e) => handleClick(e.clientX, e.clientY));
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    handleClick(e.touches[0].clientX, e.touches[0].clientY);
+});
+
+// Keyboard support (spacebar)
+document.addEventListener('keydown', (e) => {
+    if(e.code === 'Space') {
+        handleClick(canvas.width/2, canvas.height/2);
+    }
+});
+
+// Game loop
+function update() {
+    spiders.forEach(spider => spider.update());
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    spiders.forEach(spider => spider.draw());
+}
+
+function gameLoop() {
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
+}
+gameLoop();
+
+// Add footer
+const footer = document.createElement('div');
+footer.style = `position:fixed; bottom:0; width:100%; 
+    text-align:center; color:#666; padding:20px; 
+    font-size:14px; font-family:Arial,sans-serif;`;
+footer.textContent = 'More fun games at www.example.com';
+document.body.appendChild(footer);
+</script>
+</body>
+</html>

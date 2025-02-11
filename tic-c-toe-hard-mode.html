@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Human vs Unbeatable AI Tic Tac Toe</title>
+	<meta name="description" content="A beautiful, modern, and hard mode Tic Tac Toe game that works on both desktop and mobile devices">
+	<meta name="keywords" content="html game, html5 games, html canvas game, hooda math game, jumping zombie, HTML Game Example, Top HTML5 games, JavaScript Game, tic tac toe game">
+    <style>
+body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #fff;
+        }
+        .game-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .cell {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .cell:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .status {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .restart {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .restart:hover {
+            background: #45a049;
+        }
+        footer {
+            position: fixed;
+            bottom: 10px;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        footer a {
+            color: #fff;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 480px) {
+            .cell {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>You 😎 vs AI 🤖</h1>
+        <div class="board" id="board"></div>
+        <div class="status" id="status">Human's turn 😎</div>
+       <center> <button class="restart" id="restart">Restart Game</button></center>
+    </div>
+
+    <script>
+        const board = document.getElementById('board');
+        const status = document.getElementById('status');
+        const restartBtn = document.getElementById('restart');
+        let cells = [];
+        let currentPlayer = '😎';
+        let gameActive = true;
+
+        function createBoard() {
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.addEventListener('click', () => handleCellClick(i));
+                board.appendChild(cell);
+                cells.push(cell);
+            }
+        }
+
+        function handleCellClick(index) {
+            if (!gameActive || cells[index].textContent !== '') return;
+
+            cells[index].textContent = currentPlayer;
+            if (checkWin()) {
+                status.textContent = `${currentPlayer === '😎' ? 'Human' : 'AI'} wins!`;
+                gameActive = false;
+                return;
+            }
+            if (checkDraw()) {
+                status.textContent = "It's a draw!";
+                gameActive = false;
+                return;
+            }
+
+            currentPlayer = currentPlayer === '😎' ? '🤖' : '😎';
+            status.textContent = `${currentPlayer === '😎' ? 'Human' : 'AI'}'s turn ${currentPlayer}`;
+
+            if (currentPlayer === '🤖') {
+                setTimeout(robotMove, 500);
+            }
+        }
+
+        function robotMove() {
+            if (!gameActive) return;
+
+            let bestScore = -Infinity;
+            let bestMove;
+
+            for (let i = 0; i < 9; i++) {
+                if (cells[i].textContent === '') {
+                    cells[i].textContent = '🤖';
+                    let score = minimax(cells, 0, false);
+                    cells[i].textContent = '';
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMove = i;
+                    }
+                }
+            }
+
+            handleCellClick(bestMove);
+        }
+
+        function minimax(board, depth, isMaximizing) {
+            if (checkWin()) {
+                return isMaximizing ? -1 : 1;
+            }
+            if (checkDraw()) {
+                return 0;
+            }
+
+            if (isMaximizing) {
+                let bestScore = -Infinity;
+                for (let i = 0; i < 9; i++) {
+                    if (board[i].textContent === '') {
+                        board[i].textContent = '🤖';
+                        let score = minimax(board, depth + 1, false);
+                        board[i].textContent = '';
+                        bestScore = Math.max(score, bestScore);
+                    }
+                }
+                return bestScore;
+            } else {
+                let bestScore = Infinity;
+                for (let i = 0; i < 9; i++) {
+                    if (board[i].textContent === '') {
+                        board[i].textContent = '😎';
+                        let score = minimax(board, depth + 1, true);
+                        board[i].textContent = '';
+                        bestScore = Math.min(score, bestScore);
+                    }
+                }
+                return bestScore;
+            }
+        }
+
+        function checkWin() {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+                [0, 4, 8], [2, 4, 6] // Diagonals
+            ];
+
+            return winPatterns.some(pattern => {
+                const [a, b, c] = pattern;
+                return cells[a].textContent &&
+                       cells[a].textContent === cells[b].textContent &&
+                       cells[a].textContent === cells[c].textContent;
+            });
+        }
+
+        function checkDraw() {
+            return cells.every(cell => cell.textContent !== '');
+        }
+
+        function restartGame() {
+            cells.forEach(cell => cell.textContent = '');
+            currentPlayer = '😎';
+            gameActive = true;
+            status.textContent = "Human's turn 😎";
+        }
+
+        restartBtn.addEventListener('click', restartGame);
+
+        createBoard();
+
+        // Create footer with copyright
+        function createFooter() {
+            const footer = document.createElement('footer');
+            const currentYear = new Date().getFullYear();
+            footer.innerHTML = `&copy; ${currentYear} <a href="https://example.com" target="_blank">Human vs Unbeatable AI Tic Tac Toe</a>`;
+            document.body.appendChild(footer);
+        }
+
+        createFooter();
+    </script>
+</body>
+</html>

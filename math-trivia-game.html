@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATH TRIVIA GAME - Kids Game</title>
+	 <meta name="keywords" content="education game, maths play, pbs kids games, and fun game, math games for kids, kindergarten games, minecraft education, minecraft education edition, endless alphabet, emoji game, html game, html5 games, html canvas game, hooda math game, jumping zombie, HTML Game Example, Top HTML5 games, JavaScript Game">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+             background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            font-family: Arial, sans-serif;
+            color: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);;
+            overflow: hidden;
+        }
+        canvas {
+            border: 2px solid #333;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            position: relative;
+            z-index: 1;
+			text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+		h1 {
+    
+    color: white; /* Fallback color */
+    font-size: 28px; /* Adjust size as needed */
+    text-align: center; /* Center the text */
+    padding: 20px; /* Add some padding */
+    margin: -20px 0; /* Add margin above and below */
+    border-radius: 10px; /* Optional: rounded corners */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Optional: shadow for depth */
+}
+        form {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 2;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555;
+        }
+        footer {
+            position: absolute;
+            bottom: 10px;
+            font-size: 12px;
+			color: white;
+            z-index: 2;
+        }
+        .rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .correct-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 30px;
+            color: green;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+		 .wrong-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 30px;
+            color: red;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        @keyframes rain {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+<h1>MATH TRIVIA GAME</h1>
+<canvas id="gameCanvas" width="320" height="480">
+</canvas>
+<form id="answerForm">
+    <input type="text" id="answerInput" placeholder="Type your answer..." required />
+    <button type="submit">Submit Answer</button>
+	<p><small>*It's case sensitive</small>
+</form>
+<div class="rain"></div>
+<div class="correct-message" id="correctMessage">✔️CORRECT!</div>
+<div class="wrong-message" id="wrongMessage">❌WRONG!</div>
+<footer>More games at <a href="https://emojigame.pages.dev/"><font color="white">Emoji Games</font></a></footer>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const answerForm = document.getElementById('answerForm');
+    const answerInput = document.getElementById('answerInput');
+    const correctMessage = document.getElementById('correctMessage');
+	const wrongMessage = document.getElementById('wrongMessage');
+
+    let score = 0;
+    let questionIndex = 0;
+const questions = [
+    { question: "What is 5 + 3?", answer: "8" },
+    { question: "What is 12 - 7?", answer: "5" },
+    { question: "What is 3 × 4?", answer: "12" },
+    { question: "What is 16 ÷ 4?", answer: "4" },
+    { question: "What is the next number in this sequence: 2, 4, 6, ___?", answer: "8" },
+    { question: "What is the value of π (pi) rounded to two decimal places?", answer: "3.14" },
+    { question: "What is 9 + 10?", answer: "19" },
+    { question: "What is the perimeter of a rectangle with length 5 and width 3?", answer: "16" },
+    { question: "What is 15 - 6?", answer: "9" },
+    { question: "What is 8 × 7?", answer: "56" },
+    { question: "What is 24 ÷ 6?", answer: "4" },
+    { question: "What is the smallest two-digit number?", answer: "10" },
+    { question: "What is 100 minus 45?", answer: "55" },
+    { question: "What is the sum of 6, 7, and 8?", answer: "21" },
+    { question: "What is 3 squared?", answer: "9" },
+    { question: "What is the next number in this sequence: 1, 1, 2, 3, 5, ___?", answer: "8" },
+    { question: "What is the area of a square with side length 4?", answer: "16" },
+    { question: "What is 30 ÷ 5?", answer: "6" },
+    { question: "What is the value of 7 + 9?", answer: "16" },
+    { question: "What is the largest single-digit number?", answer: "9" },
+    { question: "What is 10 × 2?", answer: "20" }
+];
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+    const words = text.split(' ');
+    let line = '';
+
+    for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        const testWidth = metrics.width;
+
+        if (testWidth > maxWidth && n > 0) {
+            ctx.fillText(line, x, y);
+            line = words[n] + ' ';
+            y += lineHeight;
+        } else {
+            line = testLine;
+        }
+    }
+    ctx.fillText(line, x, y);
+}
+
+function showQuestion() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = '16px Arial';
+    ctx.fillStyle = '#333';
+
+    const maxWidth = canvas.width - 20; // 10px padding on each side
+    const lineHeight = 15; // Adjust line height as needed
+    const questionText = questions[questionIndex].question;
+
+    wrapText(ctx, questionText, 10, 50, maxWidth, lineHeight);
+    wrapText(ctx, `Correct Answer: ${score} 🏆`, 10, 100, maxWidth, lineHeight);
+}
+
+    function checkAnswer(answer) {
+    if (answer.toLowerCase() === questions[questionIndex].answer) {
+        score++;
+        correctMessage.style.opacity = 1; // Show correct message
+        setTimeout(() => {
+            correctMessage.style.opacity = 0; // Hide after a moment
+        }, 1000);
+
+        questionIndex++;
+        if (questionIndex >= questions.length) {
+            alert('You finished the game! Your score: ' + score);
+            questionIndex = 0;
+            score = 0;
+        }
+    } else {
+        wrongMessage.style.opacity = 1; // Show wrong message
+        setTimeout(() => {
+            wrongMessage.style.opacity = 0; // Hide after a moment
+        }, 1000);
+    }
+    showQuestion();
+}
+    answerForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const userAnswer = answerInput.value;
+        checkAnswer(userAnswer);
+        answerInput.value = '';
+    });
+
+    function createRain() {
+        const rainContainer = document.querySelector('.rain');
+        for (let i = 0; i < 30; i++) {
+            const emoji = document.createElement('span');
+            emoji.textContent = '💫️'; // Rain emoji
+            emoji.style.position = 'absolute';
+            emoji.style.left = Math.random() * 100 + 'vw';
+            emoji.style.top = Math.random() * 100 + 'vh';
+            emoji.style.fontSize = Math.random() * 30 + 10 + 'px';
+            emoji.style.opacity = Math.random();
+            rainContainer.appendChild(emoji);
+            setTimeout(() => {
+                emoji.remove();
+            }, 3000);
+        }
+    }
+
+    setInterval(createRain, 500);
+
+    showQuestion();
+</script>
+
+</body>
+</html>
