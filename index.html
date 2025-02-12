@@ -5,7 +5,6 @@
 	<title>Play No-download Kids Game Online Free | Educational HTML Games | Kiddo Games</title>
 	<meta name="description" content="Play no-download kids game online free, educational kid-friendly game suitable for kids or elementary school students">
     <meta name="keywords" content="education game, maths play, pbs kids games, and fun game, math games for kids, kindergarten games, minecraft education, minecraft education edition, endless alphabet, emoji game, html game, html5 games, html canvas game, hooda math game, jumping zombie, HTML Game Example, Top HTML5 games, JavaScript Game, emojis games">
-	 <meta name="last-updated" content="2025-02-13 13:08:54 UTC">
       <meta name="user-signed-in" content="false">
       <meta name="head-cached-at" content="1733144934">
       <meta name="environment" content="production">
@@ -466,5 +465,21 @@ h1 {
         });
   
 </script>
+ <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Mendapatkan waktu sekarang dari browser
+            const now = new Date();
+            // Mengubah ke format YYYY-MM-DD HH:MM:SS UTC
+            const formattedDate = now.toISOString().replace("T", " ").substring(0, 19) + " UTC";
+            
+            // Membuat elemen meta
+            const metaTag = document.createElement('meta');
+            metaTag.name = "last-updated";
+            metaTag.content = formattedDate;
+
+            // Menambahkan meta tag ke dalam head
+            document.head.appendChild(metaTag);
+        });
+    </script>	
 </body>
 </html>
